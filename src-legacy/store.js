@@ -1,11 +1,8 @@
-import { useState, useEffect } from 'react';
-
 export const store = {
   state: {
-    staffUser: null, // Initialized on client mount
+    staffUser: JSON.parse(localStorage.getItem('jagoron_staffUser')) || null, // Current logged-in user
     appLayout: 'sidebar', // 'grid' | 'sidebar'
     sidebarCollapsed: false,
-    isInitialized: false,
     
     // Admin Features: Users & Roles
     staffUsers: [
@@ -19,12 +16,18 @@ export const store = {
       { name: 'MEAL', description: 'Monitoring, Evaluation, Accountability, and Learning lead.', permissions: ['dashboard', 'reports'] },
       { name: 'Partner MEAL', description: 'MEAL officer for specific partner NGOs.', permissions: ['dashboard', 'reports'] },
       { name: 'Project Officer', description: 'Manages field implementation and YLO coordination.', permissions: ['dashboard', 'assess_youth', 'reports'] },
-      { name: 'Field Facilitator', description: 'Direct youth engagement and profiling.', permissions: ['dashboard', 'assess_youth'] },
+      { name: 'Feild Facilitator', description: 'Direct youth engagement and profiling.', permissions: ['dashboard', 'assess_youth'] },
       { name: 'Donor', description: 'High-level impact tracking and reporting.', permissions: ['donor_dashboard', 'reports'] }
     ],
 
     // Beneficiaries
-    youths: [], 
+    youths: (JSON.parse(localStorage.getItem('jagoron_youths')) || []).map(y => {
+      // Legacy status migration
+      if (y.status === 'Pending Validation') return { ...y, status: 'Submitted' };
+      if (y.status === 'Registered') return { ...y, status: 'Assessment Pending' };
+      if (y.status === 'Assessment Complete') return { ...y, status: 'Assessment Completed' };
+      return y;
+    }), 
     
     // Track current view context
     currentYouthId: null, 
@@ -76,62 +79,28 @@ export const store = {
   
   setState(newState) {
     this.state = { ...this.state, ...newState };
-    if (typeof window !== 'undefined') {
-      if (newState.staffUser !== undefined) {
-        if (newState.staffUser) {
-          localStorage.setItem('jagoron_staffUser', JSON.stringify(newState.staffUser));
-        } else {
-          localStorage.removeItem('jagoron_staffUser');
-        }
+    if (newState.staffUser !== undefined) {
+      if (newState.staffUser) {
+        localStorage.setItem('jagoron_staffUser', JSON.stringify(newState.staffUser));
+      } else {
+        localStorage.removeItem('jagoron_staffUser');
       }
-      if (newState.youths !== undefined) {
-        localStorage.setItem('jagoron_youths', JSON.stringify(newState.youths));
-      }
+    }
+    if (newState.youths !== undefined) {
+      localStorage.setItem('jagoron_youths', JSON.stringify(newState.youths));
     }
     this.notify();
   },
   
+  // Helper to add audit logs
   addLog(user, action, details) {
     const log = {
       id: Date.now(),
       timestamp: new Date().toLocaleString(),
-      user: user || 'System',
+      user: user,
       action: action,
       details: details
     };
     this.setState({ auditLogs: [log, ...this.state.auditLogs] });
-  },
-
-  initialize() {
-    if (this.state.isInitialized || typeof window === 'undefined') return;
-    const staffUser = JSON.parse(localStorage.getItem('jagoron_staffUser')) || null;
-    const rawYouths = JSON.parse(localStorage.getItem('jagoron_youths')) || [];
-    const youths = rawYouths.map(y => {
-      // Legacy status migration
-      if (y.status === 'Pending Validation') return { ...y, status: 'Submitted' };
-      if (y.status === 'Registered') return { ...y, status: 'Assessment Pending' };
-      if (y.status === 'Assessment Complete') return { ...y, status: 'Assessment Completed' };
-      return y;
-    });
-    this.setState({ staffUser, youths, isInitialized: true });
   }
 };
-
-export function useStore() {
-  const [state, setState] = useState(store.state);
-  
-  useEffect(() => {
-    store.initialize();
-    setState(store.state);
-    
-    const listener = (newState) => {
-      setState(newState);
-    };
-    store.subscribe(listener);
-    return () => {
-      store.listeners = store.listeners.filter(l => l !== listener);
-    };
-  }, []);
-  
-  return [state, store.setState.bind(store), store.addLog.bind(store)];
-}
