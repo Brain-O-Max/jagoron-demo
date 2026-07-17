@@ -3,7 +3,7 @@ import { store } from '../store.js';
 export function renderAuditLog() {
   const container = document.createElement('div');
   
-  if (store.state.staffUser?.role !== 'System Admin') {
+  if (store.state.staffUser?.role !== 'System Admin' && store.state.staffUser?.role !== 'Admin') {
     container.innerHTML = `
       <div class="card text-center" style="margin-top: 4rem;">
         <h2 style="color: var(--accent);">Access Denied</h2>

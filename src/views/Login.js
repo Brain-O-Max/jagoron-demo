@@ -80,10 +80,11 @@ export function renderLogin() {
     e.preventDefault();
     
     const emailInput = form.email.value;
+    const passInput = form.password.value;
     // Find user in DB
     const foundUser = store.state.staffUsers.find(u => u.email.toLowerCase() === emailInput.toLowerCase());
     
-    if (foundUser) {
+    if (foundUser && foundUser.password === passInput) {
       if (foundUser.status === 'Disabled') {
         alert("This account has been disabled. Please contact your administrator.");
         return;
