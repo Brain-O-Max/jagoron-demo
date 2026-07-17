@@ -6,9 +6,9 @@ export const store = {
     
     // Admin Features: Users & Roles
     staffUsers: [
-      { id: 1, name: 'Jane Doe', email: 'staff@care.org', mobile: '+8801711111111', designation: 'Field Officer', dob: '1992-05-15', joiningDate: '2025-01-01', location: 'Khulna', address: 'Khulna Sadar', org: 'CARE Bangladesh', role: 'Field Officer', region: 'Khulna', status: 'Active' },
-      { id: 2, name: 'Admin User', email: 'admin@xyz.org', mobile: '+8801811111111', designation: 'Admin', dob: '1988-10-20', joiningDate: '2024-06-15', location: 'Dhaka', address: 'Banani', org: 'SOS Childrens Village', role: 'Admin', region: 'Global', status: 'Active' },
-      { id: 3, name: 'Donor User', email: 'donor@usaid.gov', mobile: '+12025550198', designation: 'Project Funder', dob: '', joiningDate: '', location: 'Washington DC', address: '', org: 'Donor Agency', role: 'Donor', region: 'Global', status: 'Active' }
+      { id: 1, name: 'Jane Doe', email: 'staff@care.org', password: 'password', mobile: '+8801711111111', designation: 'Field Officer', dob: '1992-05-15', joiningDate: '2025-01-01', location: 'Khulna', address: 'Khulna Sadar', org: 'CARE Bangladesh', role: 'Field Officer', region: 'Khulna', status: 'Active' },
+      { id: 2, name: 'Admin User', email: 'admin@xyz.org', password: 'password', mobile: '+8801811111111', designation: 'Admin', dob: '1988-10-20', joiningDate: '2024-06-15', location: 'Dhaka', address: 'Banani', org: 'SOS Childrens Village', role: 'Admin', region: 'Global', status: 'Active' },
+      { id: 3, name: 'Donor User', email: 'donor@usaid.gov', password: 'password', mobile: '+12025550198', designation: 'Project Funder', dob: '', joiningDate: '', location: 'Washington DC', address: '', org: 'Donor Agency', role: 'Donor', region: 'Global', status: 'Active' }
     ],
     roles: [
       { name: 'Admin', description: 'Full system access and configuration.', permissions: ['dashboard', 'assess_youth', 'bulk_sms', 'reports', 'question_bank', 'mis_sync', 'manage_users', 'manage_roles'] },
@@ -48,7 +48,16 @@ export const store = {
 
     // Audit Log
     auditLogs: [
-      { id: 1, timestamp: new Date(Date.now() - 86400000).toLocaleString(), user: 'System', action: 'System Initialization', details: 'Database seeded' }
+      { id: 1, timestamp: new Date(Date.now() - 86400000).toLocaleString(), user: 'System', action: 'System Initialization', details: 'Database seeded' },
+      { id: 2, timestamp: new Date(Date.now() - 3600000).toLocaleString(), user: 'Jane Doe', action: 'Security', details: 'Logged into the system.' },
+      { id: 3, timestamp: new Date(Date.now() - 1800000).toLocaleString(), user: 'Admin User', action: 'Pre-Screening ML', details: 'Approved 3 profiles, Rejected 0.' },
+    ],
+
+    // Sync Logs for Field Agents
+    syncLogs: [
+      { id: 101, user: 'Jane Doe', location: 'Khulna Sadar', device: 'Galaxy Tab A7', timestamp: new Date(Date.now() - 7200000).toLocaleString(), recordsSynced: 10, dataSize: '145 KB', duration: '2.4s', status: 'Success', details: 'Synced 10 new youth registrations including demographic and baseline assessment data. No data conflicts detected.' },
+      { id: 102, user: 'Rahim Ali', location: 'Gazipur', device: 'Lenovo Tab M8', timestamp: new Date(Date.now() - 14400000).toLocaleString(), recordsSynced: 2, dataSize: '24 KB', duration: '0.8s', status: 'Success', details: 'Synced 2 updated profiles. Overwritten existing local data with server changes.' },
+      { id: 103, user: 'Jane Doe', location: 'Khulna Sadar', device: 'Galaxy Tab A7', timestamp: new Date(Date.now() - 259200000).toLocaleString(), recordsSynced: 0, dataSize: '0 KB', duration: '15.0s', status: 'Failed (Network Error)', details: 'Connection timed out while attempting to reach the central MIS server. Payload size was 850 KB.' }
     ],
 
     // Enhanced Question Bank

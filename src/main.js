@@ -21,6 +21,8 @@ import { renderUserManagement } from './views/UserManagement.js';
 import { renderRoleManagement } from './views/RoleManagement.js';
 import { renderReports } from './views/Reports.js';
 import { renderAuditLog } from './views/AuditLog.js';
+import { renderChangePassword } from './views/ChangePassword.js';
+import { renderSyncLog } from './views/SyncLog.js';
 
 // Components
 import { renderSidebar } from './components/Sidebar.js';
@@ -124,6 +126,12 @@ export function navigateTo(path, params = {}) {
       break;
     case '/audit-log':
       viewContainer.appendChild(renderAuditLog());
+      break;
+    case '/change-password':
+      viewContainer.appendChild(renderChangePassword());
+      break;
+    case '/sync-log':
+      viewContainer.appendChild(renderSyncLog());
       break;
     default:
       viewContainer.appendChild(store.state.appLayout === 'grid' ? renderGridHome() : renderDashboard());
