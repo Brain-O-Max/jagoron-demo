@@ -96,7 +96,7 @@ export function renderLogin() {
           region: foundUser.region || 'Global'
         }
       });
-      navigateTo('/home');
+      navigateTo('/dashboard');
     } else {
       alert("Invalid email credentials. Try admin@xyz.org");
     }

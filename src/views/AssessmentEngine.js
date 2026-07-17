@@ -12,7 +12,7 @@ export function renderAssessmentEngine() {
     // Filter youths who need assessment or processing
     let targetYouths = store.state.youths.filter(y => 
       y.status === 'Assessment Pending' || 
-      y.status === 'Assessment Completed' || 
+      y.status === 'Approved' || 
       y.status === 'Assessed' || 
       y.status === 'Profiled' // fallback for older states
     );
@@ -34,13 +34,13 @@ export function renderAssessmentEngine() {
       if (statusFilter === 'Pending Assessment') {
         targetYouths = targetYouths.filter(y => y.status === 'Assessment Pending');
       } else if (statusFilter === 'Pending AI Processing') {
-        targetYouths = targetYouths.filter(y => y.status === 'Assessment Completed');
+        targetYouths = targetYouths.filter(y => y.status === 'Approved');
       } else if (statusFilter === 'Assessed') {
         targetYouths = targetYouths.filter(y => y.status === 'Assessed' || y.status === 'Profiled');
       }
     }
     
-    const pendingProcessing = targetYouths.filter(y => y.status === 'Assessment Completed' || y.status === 'Assessed' || y.status === 'Profiled');
+    const pendingProcessing = targetYouths.filter(y => y.status === 'Approved' || y.status === 'Assessed' || y.status === 'Profiled');
     
     container.innerHTML = `
       <div class="flex justify-between items-center mb-4">
@@ -52,8 +52,9 @@ export function renderAssessmentEngine() {
           <button id="btn-bulk-assess" class="btn btn-primary" style="background: var(--accent); border-color: var(--accent); display: none;">
             📋 Bulk Assess Selected (0)
           </button>
-          <button id="btn-run-all" class="btn btn-primary" ${pendingProcessing.length === 0 ? 'disabled style="opacity:0.5"' : ''}>
-            🚀 Run AI Engine (${pendingProcessing.length} Available)
+          <button id="btn-run-all" class="btn btn-primary" ${pendingProcessing.length === 0 ? 'disabled style="opacity:0.5"' : ''} style="display: flex; align-items: center;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 0.5rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            Run AI Engine (${pendingProcessing.length} Available)
           </button>
         </div>
       </div>

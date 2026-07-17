@@ -27,7 +27,8 @@ export function renderPreScreening() {
           <p>Run the ML validation process to detect anomalies and duplicate entries before allowing assessments.</p>
         </div>
         <button id="btn-run-ml" class="btn btn-primary" style="background: var(--accent); border-color: var(--accent); padding: 0.75rem 1.5rem; font-weight: bold;" ${pendingYouths.length === 0 ? 'disabled' : ''}>
-          🤖 Run ML Pre-Screening Process
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 0.5rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+          Run ML Pre-Screening Process
         </button>
       </div>
       
@@ -60,7 +61,7 @@ export function renderPreScreening() {
                     <td>
                       <div class="flex gap-2">
                         <button class="btn btn-secondary btn-view" data-id="${y.id}" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">👁️ View Details</button>
-                        <button class="btn btn-primary btn-approve" data-id="${y.id}" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--success); border-color: var(--success);">✓ Approve</button>
+                        <button class="btn btn-primary btn-approve" data-id="${y.id}" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: #10b981; border-color: #10b981;">✓ Approve</button>
                       </div>
                     </td>
                   </tr>
@@ -159,7 +160,7 @@ export function renderPreScreening() {
         }
         
         if (confirm(`Manually approve ${y.name}?`)) {
-          const updatedYouths = store.state.youths.map(u => u.id === id ? { ...u, status: 'Assessment Completed' } : u);
+          const updatedYouths = store.state.youths.map(u => u.id === id ? { ...u, status: 'Approved' } : u);
           store.setState({ youths: updatedYouths });
           store.addLog(store.state.staffUser?.name || 'System', 'Manual Approve', `Manually approved ${y.name}`);
         }
@@ -260,7 +261,7 @@ export function renderPreScreening() {
                     return y; // Do not approve, keep in current state
                   } else {
                     approvedCount++;
-                    return { ...y, status: 'Assessment Completed' };
+                    return { ...y, status: 'Approved' };
                   }
                 }
                 return y;

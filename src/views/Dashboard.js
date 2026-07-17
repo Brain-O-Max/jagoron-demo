@@ -37,7 +37,7 @@ export function renderDashboard() {
       <!-- Sector Match Pie Chart -->
       <div class="card">
         <h3 style="margin-bottom: 1rem;">Recommended Pathways Distribution</h3>
-        <div class="chart-container">
+        <div class="chart-container" style="position: relative; height: 180px; width: 100%;">
           <canvas id="sectorChart"></canvas>
         </div>
       </div>
@@ -45,7 +45,7 @@ export function renderDashboard() {
       <!-- District Distribution Bar Chart -->
       <div class="card">
         <h3 style="margin-bottom: 1rem;">Enrollment by District</h3>
-        <div class="chart-container">
+        <div class="chart-container" style="position: relative; height: 180px; width: 100%;">
           <canvas id="districtChart"></canvas>
         </div>
       </div>
@@ -53,7 +53,7 @@ export function renderDashboard() {
     
     <div class="card">
       <h3 style="margin-bottom: 1rem;">Registration Trends (Monthly)</h3>
-      <div class="chart-container" style="height: 250px;">
+      <div class="chart-container" style="position: relative; height: 200px; width: 100%;">
         <canvas id="trendChart"></canvas>
       </div>
     </div>
